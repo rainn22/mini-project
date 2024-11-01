@@ -1,16 +1,6 @@
-// Enumeration for Reservation Status
-import 'customer.dart';
+import 'dart:io';
 import 'menu.dart';
-import 'order.dart';
-
-enum ReserveStatus { available, reserved }
-
-// Enumeration for Payment Status
-enum PaymentStatus { paid, unpaid }
-
-// Enumeration for Order Status
-enum OrderStatus { pending, completed }
-
+import 'rms.dart';
 
 void main() {
   // Initialize the menu
@@ -26,25 +16,44 @@ void main() {
   menu.addMenuItem("Shichuan", 1.99);
   menu.addMenuItem("Soda", 1.99);
   menu.addMenuItem("Tea", 1.99);
-  menu.showMenu();
 
-  // Create a customer
-  Customer customer = Customer(name: "Rain", phoneNum: "096 227 597");
+  // Table Reservation
+  RestaurantSys restaurantsystem = RestaurantSys();
+  
+  while (true) {
+    print("Welcome to our Restaurant :)");
+    print("1. Add Reservation");
+    print("2. View Reservations");
+    print("3. View Table Status");
+    print("4. Cancel Reservation");
+    print("5. Place an Order");
+    print("6. Exit");
 
-  // Tabele Reservation
+    stdout.write("Choose an option: ");
+    String? choice = stdin.readLineSync();
 
-  // Customer places an order
-  Order order1 = Order();
-  order1.items.addAll(["Pork", "Soda"]);
-  order1.items.addAll(["USA Beef"]);
-  order1.calculateTotal(menu);
-  customer.placeOrder(order1);
-  order1.showReceipt(menu);
-  // print("Order Total: \$${order1.totalPrice}");
-
-  // Processing payment and completing the order
-  order1.processPayment(PaymentStatus.paid);
-  order1.updateStatus(OrderStatus.completed);
-  print("Order Status: ${order1.orderStatus}");
-  print("Payment Status: ${order1.paymentStatus}");
+    switch (choice) {
+      case "1":
+        restaurantsystem.addReservation();
+        break;
+      case "2":
+        restaurantsystem.viewReservations();
+        break;
+      case "3":
+        restaurantsystem.viewTables();
+        break;
+      case "4":
+        restaurantsystem.cancelReservation();
+        break;
+      case "5":
+        restaurantsystem.createOrder(menu, restaurantsystem);
+        break;
+      case "6":
+        print("Thank you Jub Jub, Goodbye!");
+        return;
+      default:
+        print("\nInvalid option. Choose a valid option.\n");
+        break;
+    }
+  }
 }
